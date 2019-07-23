@@ -16,7 +16,10 @@ namespace StorageData.DBContext
             this.configuration = new Configuration();
         }
 
-        public DbSet<Data> Datas { get; set; }
+        public DbSet<EventAttribute> EventAttributes { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Frame> Frames { get; set; }
+        public DbSet<Parameter> Parameters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
