@@ -17,7 +17,6 @@ namespace StorageData.DBContext
         }
 
         public DbSet<EventAttribute> EventAttributes { get; set; }
-        public DbSet<Event> Events { get; set; }
         public DbSet<Frame> Frames { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
 

@@ -17,10 +17,12 @@ namespace StorageData.Service
     public class Storage : IStorage
     {
         public Context dataBase;
+        public DBData dbData;
 
         public Storage()
         {
             this.dataBase = new Context();
+            this.dbData = new DBData();
         }
 
         public void AddData(string path, JsonData data)
@@ -43,31 +45,17 @@ namespace StorageData.Service
 
         private void DBDataStorage(JsonData data)
         {
-            if (dataBase.Parameters.Select(item => item.Id).Count() == 0)
+            if (dataBase.Parameters.Select(parametr => parametr.Id).Count() == 0)
             {
                 dataBase.Parameters.Add(new Parameter { Name = "Type" });
                 dataBase.Parameters.Add(new Parameter { Name = "CameraId" });
                 dataBase.Parameters.Add(new Parameter { Name = "Coordinate_X" });
                 dataBase.Parameters.Add(new Parameter { Name = "Coordinate_Y" });
-                dataBase.Parameters.Add(new Parameter { Name = "Coordinate_Z" });
-                dataBase.Parameters.Add(new Parameter { Name = "Coordinate_D" });
                 dataBase.Parameters.Add(new Parameter { Name = "BackgroundId" });
+                dataBase.Parameters.Add(new Parameter { Name = "DateTime" });
                 dataBase.SaveChanges();
             }
-            var Type = dataBase.Parameters.Where(item => item.Name == "CameraId").Select(item => item);
-
-            dataBase.EventAttributes.Add(new EventAttribute {  });
-            //var str = dataBase.Parameters.Select(item => item.Name == "CameraId");
-            Console.WriteLine();
-            //if (dataBase.EventAttributes.Select(item => item.))){ }
-
-            //dataBase.Events.Add(new Event { DateTime_Start = data.DateTime });
-
-            //Заглушка
-            //dataBase.Events.Add(new Event { DateTime_Start = data.DateTime, DateTime_End = data.DateTime });
-            //
-            //dataBase.Frames.Add(new Frame { EventId = dataBase.Events.Select(item => item.) });
-            dataBase.SaveChanges();
+            dbData.AddData(data);
         }
 
         private void FileStorage(string path, JsonData data)

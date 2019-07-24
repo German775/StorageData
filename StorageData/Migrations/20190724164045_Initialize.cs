@@ -3,21 +3,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StorageData.Migrations
 {
-    public partial class Inizialize : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Events",
+                name: "Frames",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DateTime_Start = table.Column<DateTime>(nullable: false),
-                    DateTime_End = table.Column<DateTime>(nullable: false)
+                    EventId = table.Column<Guid>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.PrimaryKey("PK_Frames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,31 +33,10 @@ namespace StorageData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Frames",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    EventId = table.Column<Guid>(nullable: false),
-                    Timestamp = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Frames", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Frames_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EventAttributes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Frame_Id = table.Column<Guid>(nullable: false),
-                    Parem_Id = table.Column<Guid>(nullable: false),
                     Value = table.Column<string>(nullable: true),
                     FramesId = table.Column<Guid>(nullable: true),
                     ParametersId = table.Column<Guid>(nullable: true)
@@ -88,11 +67,6 @@ namespace StorageData.Migrations
                 name: "IX_EventAttributes_ParametersId",
                 table: "EventAttributes",
                 column: "ParametersId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Frames_EventId",
-                table: "Frames",
-                column: "EventId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -105,9 +79,6 @@ namespace StorageData.Migrations
 
             migrationBuilder.DropTable(
                 name: "Parameters");
-
-            migrationBuilder.DropTable(
-                name: "Events");
         }
     }
 }

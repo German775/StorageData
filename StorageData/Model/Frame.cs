@@ -11,7 +11,6 @@ namespace StorageData.Model
         public Guid EventId { get; set; }
         public DateTime Timestamp { get; set; }
 
-        public virtual Event Events { get; set; }
         public virtual ICollection<EventAttribute> EventAttributes { get; set; }
     }
 }

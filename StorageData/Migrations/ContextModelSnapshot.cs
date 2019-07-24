@@ -19,32 +19,14 @@ namespace StorageData.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("StorageData.Model.Event", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateTime_End");
-
-                    b.Property<DateTime>("DateTime_Start");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Events");
-                });
-
             modelBuilder.Entity("StorageData.Model.EventAttribute", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("Frame_Id");
-
                     b.Property<Guid?>("FramesId");
 
                     b.Property<Guid?>("ParametersId");
-
-                    b.Property<Guid>("Parem_Id");
 
                     b.Property<string>("Value");
 
@@ -67,8 +49,6 @@ namespace StorageData.Migrations
                     b.Property<DateTime>("Timestamp");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EventId");
 
                     b.ToTable("Frames");
                 });
@@ -94,14 +74,6 @@ namespace StorageData.Migrations
                     b.HasOne("StorageData.Model.Parameter", "Parameters")
                         .WithMany("EventAttributes")
                         .HasForeignKey("ParametersId");
-                });
-
-            modelBuilder.Entity("StorageData.Model.Frame", b =>
-                {
-                    b.HasOne("StorageData.Model.Event", "Events")
-                        .WithMany("Frames")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

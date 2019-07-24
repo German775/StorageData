@@ -12,10 +12,9 @@ namespace StorageData.TransferData
         public DateTime DateTime { get; set; }
         public string Coordinate_X  { get; set; }
         public string Coordinate_Y { get; set; }
-        public string Coordinate_Z { get; set; }
-        public string Coordinate_D { get; set; }
         public Guid BackgroundId { get; set; }
         public Guid CameraId { get; set; }
         public string Data { get; set; }
+        public Guid EventId { get; set; }
     }
 }

@@ -1,0 +1,1 @@
+﻿Invoke-RestMethod http://localhost:55057/api/getdata -Method POST -Body (@{cameraid="3eb1ee21-e415-48e7-a5c6-a15631bd1879"; backgroundid = "ac26bc07-dcc7-4a69-84ab-6728c7bfd68d"; datetime="2019-07-24T18:25:43.511Z"; Type="Background"; EventId = "6a8377c8-cced-4226-870a-850232d2da30"; Data=""} | ConvertTo-Json) -ContentType "application/json"
