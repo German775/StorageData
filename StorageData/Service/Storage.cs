@@ -45,16 +45,6 @@ namespace StorageData.Service
 
         private void DBDataStorage(JsonData data)
         {
-            if (dataBase.Parameters.Select(parametr => parametr.Id).Count() == 0)
-            {
-                dataBase.Parameters.Add(new Parameter { Name = "Type" });
-                dataBase.Parameters.Add(new Parameter { Name = "CameraId" });
-                dataBase.Parameters.Add(new Parameter { Name = "Coordinate_X" });
-                dataBase.Parameters.Add(new Parameter { Name = "Coordinate_Y" });
-                dataBase.Parameters.Add(new Parameter { Name = "BackgroundId" });
-                dataBase.Parameters.Add(new Parameter { Name = "DateTime" });
-                dataBase.SaveChanges();
-            }
             dbData.AddData(data);
         }
 
