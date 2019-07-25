@@ -10,26 +10,24 @@ namespace StorageData.Controllers
     [Route("api/[controller]")]
     public class GetEventListController : Controller
     {
-
-        public Context dataBase;
+        public Context dbContext;
 
         public GetEventListController()
         {
-            this.dataBase = new Context();
+            this.dbContext = new Context();
         }
 
         [HttpPost]
-        public IEnumerable<Guid> Post(int cameraId)
+        public ActionResult<IEnumerable<string>> Post(string cameraId)
         {
-            return null;
-        }
-
-        [HttpPost]
-        public IEnumerable<Guid> Post()
-        {
-            //List<Guid> eventList = dataBase.Datas.Select(item => item.FileId).ToList();
-            //return eventList;
-            return null;
+            var eventList = new List<string>();
+            var keyCamera = dbContext.Parameters.Where(item => item.Name == "CameraId").Select(item => item.Id).First();
+            var listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId").Select(item => item.Frames.EventId).Distinct();
+            foreach (var item in listEvents)
+            {
+                eventList.Add(item.ToString());
+            }
+            return eventList;
         }
     }
 }

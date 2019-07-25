@@ -14,24 +14,14 @@ namespace StorageData.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GetDataController : Controller
+    public class SetDataController : Controller
     {
         [HttpPost]
         public void Post([FromBody]JsonData jsonData)
         {
             var storage = new Storage();
             var configuration = new Configuration();
-            storage.AddData(configuration.GetConfiguration().PathForStoreImage, jsonData);
+            storage.AddData(jsonData);
         }
-        /*
-        [HttpPost]
-        [Consumes("multipart/form-data")]
-        public void Post([FromForm] IFormFile image, [FromForm]Data data)
-        {
-            var storage = new Storage();
-            var configuration = new Configuration();
-            storage.AddData(configuration.GetConfiguration().PathForStoreImage, data, image);
-        }
-        */
     }
 }

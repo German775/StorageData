@@ -10,7 +10,7 @@ using StorageData.DBContext;
 namespace StorageData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20190724164045_Initialize")]
+    [Migration("20190725094419_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,48 @@ namespace StorageData.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Parameters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("dae13c88-a51c-4ba7-92cc-2364842d60cd"),
+                            Name = "Type"
+                        },
+                        new
+                        {
+                            Id = new Guid("d4b6384b-1340-445a-8442-6f6d3a1cb5b7"),
+                            Name = "CameraId"
+                        },
+                        new
+                        {
+                            Id = new Guid("89680452-5e56-4e53-9f1a-fce6575a53ec"),
+                            Name = "Coordinate_X"
+                        },
+                        new
+                        {
+                            Id = new Guid("01f0731c-8805-4c69-93c9-11452c8b18b9"),
+                            Name = "Coordinate_Y"
+                        },
+                        new
+                        {
+                            Id = new Guid("f8a727c3-0fbb-4c88-848b-5ee318f23380"),
+                            Name = "BackgroundId"
+                        },
+                        new
+                        {
+                            Id = new Guid("6beee271-8f34-40fd-9a61-4c35662fc38c"),
+                            Name = "DateTime"
+                        },
+                        new
+                        {
+                            Id = new Guid("bd245af0-433c-46d0-9cc1-39a301bafc39"),
+                            Name = "Width"
+                        },
+                        new
+                        {
+                            Id = new Guid("c1bb71bb-89c9-4c98-9f01-f5d51f6af121"),
+                            Name = "Length"
+                        });
                 });
 
             modelBuilder.Entity("StorageData.Model.EventAttribute", b =>

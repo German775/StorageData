@@ -58,6 +58,21 @@ namespace StorageData.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Parameters",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("dae13c88-a51c-4ba7-92cc-2364842d60cd"), "Type" },
+                    { new Guid("d4b6384b-1340-445a-8442-6f6d3a1cb5b7"), "CameraId" },
+                    { new Guid("89680452-5e56-4e53-9f1a-fce6575a53ec"), "Coordinate_X" },
+                    { new Guid("01f0731c-8805-4c69-93c9-11452c8b18b9"), "Coordinate_Y" },
+                    { new Guid("f8a727c3-0fbb-4c88-848b-5ee318f23380"), "BackgroundId" },
+                    { new Guid("6beee271-8f34-40fd-9a61-4c35662fc38c"), "DateTime" },
+                    { new Guid("bd245af0-433c-46d0-9cc1-39a301bafc39"), "Width" },
+                    { new Guid("c1bb71bb-89c9-4c98-9f01-f5d51f6af121"), "Length" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EventAttributes_FramesId",
                 table: "EventAttributes",
