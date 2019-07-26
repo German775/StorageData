@@ -18,16 +18,26 @@ namespace StorageData.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<string>> Post(string cameraId)
+        public ActionResult<IEnumerable<string>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
         {
             var eventList = new List<string>();
-            var keyCamera = dbContext.Parameters.Where(item => item.Name == "CameraId").Select(item => item.Id).First();
-            var listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId").Select(item => item.Frames.EventId).Distinct();
-            foreach (var item in listEvents)
+            var listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
+            if (beginPeriod != DateTime.MinValue && endPeriod != DateTime.MinValue)
             {
-                eventList.Add(item.ToString());
+                foreach (var itemOfListEvent in listEvents)
+                {
+                    var test = dbContext.EventAttributes.Where(item => item.Frames.EventId == itemOfListEvent && item.Parameters.Name == "DateTime" && Convert.ToDateTime(item.Value) >= beginPeriod);
+                }
+                return eventList;
             }
-            return eventList;
+            else
+            {
+                foreach (var item in listEvents)
+                {
+                    eventList.Add(item.ToString());
+                }
+                return eventList;
+            }
         }
     }
 }

@@ -14,18 +14,18 @@ namespace StorageData.Service
 
     public class Storage : IStorage
     {
-        public Context dataBase;
+        public Context dbContext;
         public Data dbData;
 
         public Storage()
         {
-            this.dataBase = new Context();
+            this.dbContext = new Context();
             this.dbData = new Data();
         }
 
         public void AddData(JsonData data)
         {
-            using (var transaction = dataBase.Database.BeginTransaction())
+            using (var transaction = dbContext.Database.BeginTransaction())
             {
                 try
                 {

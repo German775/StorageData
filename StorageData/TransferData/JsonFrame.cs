@@ -14,5 +14,6 @@ namespace StorageData.TransferData
         public string DateTime { get; set; }
         public string BackgroundId { get; set; }
         public string Data { get; set; }
+        public Guid FrameId { get; set; }
     }
 }

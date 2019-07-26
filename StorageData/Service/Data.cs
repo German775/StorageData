@@ -16,12 +16,12 @@ namespace StorageData.Service
 
     public class Data : IData
     {
-        public Context dataBase;
+        public Context dbContext;
         public Dictionary<string, Guid> parametersKey;
 
         public Data()
         {
-            this.dataBase = new Context();
+            this.dbContext = new Context();
             this.parametersKey = GetParametersKey();
         }
 
@@ -40,32 +40,32 @@ namespace StorageData.Service
         private void DBAddBackground(JsonData data)
         {
             var frame = AddFrame(data);
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Type"), Value = data.Type.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("CameraId"), Value = data.CameraId.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("BackgroundId"), Value = data.BackgroundId.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("DateTime"), Value = data.DateTime.ToString() });
-            dataBase.SaveChanges();
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Type"), Value = data.Type.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("CameraId"), Value = data.CameraId.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("BackgroundId"), Value = data.BackgroundId.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("DateTime"), Value = data.DateTime.ToString() });
+            dbContext.SaveChanges();
         }
 
         private void DBAddFrame(JsonData data)
         {
             var frame = AddFrame(data);
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Type"), Value = data.Type.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("CameraId"), Value = data.CameraId.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("BackgroundId"), Value = data.BackgroundId.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("DateTime"), Value = data.DateTime.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Coordinate_X"), Value = data.Coordinate_X.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Coordinate_Y"), Value = data.Coordinate_Y.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Width"), Value = data.Width.ToString() });
-            dataBase.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Length"), Value = data.Length.ToString() });
-            dataBase.SaveChanges();
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Type"), Value = data.Type.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("CameraId"), Value = data.CameraId.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("BackgroundId"), Value = data.BackgroundId.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("DateTime"), Value = data.DateTime.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Coordinate_X"), Value = data.Coordinate_X.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Coordinate_Y"), Value = data.Coordinate_Y.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Width"), Value = data.Width.ToString() });
+            dbContext.EventAttributes.Add(new EventAttribute { Frames = frame, Parameters = getObjectParametr("Length"), Value = data.Length.ToString() });
+            dbContext.SaveChanges();
         }
 
         private Frame AddFrame(JsonData data)
         {
             var frame = new Frame { Id = Guid.NewGuid(), EventId = data.EventId, Timestamp = data.DateTime };
-            dataBase.Frames.Add(frame);
-            dataBase.SaveChanges();
+            dbContext.Frames.Add(frame);
+            dbContext.SaveChanges();
             var configuration = new Configuration().GetConfiguration().PathForStoreImage;
             FileStorage(configuration, frame.Id.ToString(), data );
             return frame;
@@ -73,7 +73,7 @@ namespace StorageData.Service
 
         private Parameter getObjectParametr(string parametr)
         {
-            return dataBase.Parameters.First(item => item.Id == parametersKey[parametr]);
+            return dbContext.Parameters.First(item => item.Id == parametersKey[parametr]);
         }
 
         private void FileStorage(string path, string name, JsonData data)
@@ -101,14 +101,14 @@ namespace StorageData.Service
         private Dictionary<string, Guid> GetParametersKey()
         {
             var parametersKey = new Dictionary<string, Guid>();
-            parametersKey.Add("CameraId", dataBase.Parameters.Where(parametr => parametr.Name == "CameraId").Select(item => item.Id).First());
-            parametersKey.Add("BackgroundId", dataBase.Parameters.Where(parametr => parametr.Name == "BackgroundId").Select(item => item.Id).First());
-            parametersKey.Add("Type", dataBase.Parameters.Where(parametr => parametr.Name == "Type").Select(item => item.Id).First());
-            parametersKey.Add("DateTime", dataBase.Parameters.Where(parametr => parametr.Name == "DateTime").Select(item => item.Id).First());
-            parametersKey.Add("Coordinate_X", dataBase.Parameters.Where(parametr => parametr.Name == "Coordinate_X").Select(item => item.Id).First());
-            parametersKey.Add("Coordinate_Y", dataBase.Parameters.Where(parametr => parametr.Name == "Coordinate_Y").Select(item => item.Id).First());
-            parametersKey.Add("Width", dataBase.Parameters.Where(parametr => parametr.Name == "Width").Select(item => item.Id).First());
-            parametersKey.Add("Length", dataBase.Parameters.Where(parametr => parametr.Name == "Length").Select(item => item.Id).First());
+            parametersKey.Add("CameraId", dbContext.Parameters.Where(parametr => parametr.Name == "CameraId").Select(item => item.Id).First());
+            parametersKey.Add("BackgroundId", dbContext.Parameters.Where(parametr => parametr.Name == "BackgroundId").Select(item => item.Id).First());
+            parametersKey.Add("Type", dbContext.Parameters.Where(parametr => parametr.Name == "Type").Select(item => item.Id).First());
+            parametersKey.Add("DateTime", dbContext.Parameters.Where(parametr => parametr.Name == "DateTime").Select(item => item.Id).First());
+            parametersKey.Add("Coordinate_X", dbContext.Parameters.Where(parametr => parametr.Name == "Coordinate_X").Select(item => item.Id).First());
+            parametersKey.Add("Coordinate_Y", dbContext.Parameters.Where(parametr => parametr.Name == "Coordinate_Y").Select(item => item.Id).First());
+            parametersKey.Add("Width", dbContext.Parameters.Where(parametr => parametr.Name == "Width").Select(item => item.Id).First());
+            parametersKey.Add("Length", dbContext.Parameters.Where(parametr => parametr.Name == "Length").Select(item => item.Id).First());
             return parametersKey;
         }
     }
