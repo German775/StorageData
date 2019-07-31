@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StorageData.Model;
-using Newtonsoft.Json;
-using System.IO;
+﻿using Microsoft.AspNetCore.Mvc;
 using StorageData.Service;
 using StorageData.TransferData;
 
@@ -20,7 +12,6 @@ namespace StorageData.Controllers
         public void Post([FromBody]JsonData jsonData)
         {
             var storage = new Storage();
-            var configuration = new Configuration();
             storage.AddData(jsonData);
         }
     }

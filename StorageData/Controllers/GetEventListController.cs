@@ -18,26 +18,18 @@ namespace StorageData.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<string>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
+        public ActionResult<IEnumerable<Guid>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
         {
-            var eventList = new List<string>();
-            var listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
+            IEnumerable<Guid> listEvents;
             if (beginPeriod != DateTime.MinValue && endPeriod != DateTime.MinValue)
             {
-                foreach (var itemOfListEvent in listEvents)
-                {
-                    var test = dbContext.EventAttributes.Where(item => item.Frames.EventId == itemOfListEvent && item.Parameters.Name == "DateTime" && Convert.ToDateTime(item.Value) >= beginPeriod);
-                }
-                return eventList;
+                listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId && item.Frames.Timestamp >= beginPeriod && item.Frames.Timestamp <= endPeriod).Select(item => item.Frames.EventId).Distinct();
             }
             else
             {
-                foreach (var item in listEvents)
-                {
-                    eventList.Add(item.ToString());
-                }
-                return eventList;
+                listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
             }
+            return listEvents.ToList();
         }
     }
 }

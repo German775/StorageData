@@ -20,15 +20,17 @@ namespace StorageData.Controllers
             this.configuration = new Configuration();
         }
         [HttpPost]
-        public string Post(string backgroundId)
+        public IEnumerable<string> Post(string backgroundId)
         {
+            var background = new List<string>();
             var frameId = dbContext.EventAttributes.Where(item => item.Parameters.Name == "BackgroundId" && item.Value == backgroundId).Select(item => item.Frames.Id).First();
             var eventId = dbContext.EventAttributes.Where(item => item.Parameters.Name == "BackgroundId" && item.Value == backgroundId).Select(item => item.Frames.EventId).First();
             using (var fileStream = new FileStream($"{configuration.GetConfiguration().PathForStoreImage}//{eventId}//Background//{frameId}.jpg".ToString(), FileMode.Open, FileAccess.Read))
             {
                 var buffer = new byte[fileStream.Length];
                 fileStream.Read(buffer, 0, (int)fileStream.Length);
-                return(Convert.ToBase64String(buffer));
+                background.Add(Convert.ToBase64String(buffer));
+                return background;
             };
         }
     }
