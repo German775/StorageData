@@ -14,7 +14,7 @@ namespace StorageData.DBContext
             Database.EnsureCreated();
         }
 
-        public DbSet<EventAttribute> EventAttributes { get; set; }
+        public DbSet<FrameParameter> FrameParameters { get; set; }
         public DbSet<Frame> Frames { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
 
@@ -33,9 +33,8 @@ namespace StorageData.DBContext
                 new Parameter { Id = Guid.NewGuid(), Name = "Coordinate_X" },
                 new Parameter { Id = Guid.NewGuid(), Name = "Coordinate_Y" },
                 new Parameter { Id = Guid.NewGuid(), Name = "BackgroundId" },
-                new Parameter { Id = Guid.NewGuid(), Name = "DateTime" },
                 new Parameter { Id = Guid.NewGuid(), Name = "Width"},
-                new Parameter { Id = Guid.NewGuid(), Name = "Length"}
+                new Parameter { Id = Guid.NewGuid(), Name = "Height"}
             });
             base.OnModelCreating(modelBuilder);
         }

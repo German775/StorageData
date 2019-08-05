@@ -17,6 +17,6 @@ namespace StorageData.TransferData
         public string Data { get; set; }
         public Guid EventId { get; set; }
         public string Width { get; set; }
-        public string Length { get; set; }
+        public string Height { get; set; }
     }
 }

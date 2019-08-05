@@ -9,6 +9,6 @@ namespace StorageData.Model
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<EventAttribute> EventAttributes { get; set; }
+        public virtual ICollection<FrameParameter> EventAttributes { get; set; }
     }
 }

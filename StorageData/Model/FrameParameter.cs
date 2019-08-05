@@ -2,7 +2,7 @@
 
 namespace StorageData.Model
 {
-    public class EventAttribute
+    public class FrameParameter
     {
         public Guid Id { get; set; }
         public string Value { get; set; }

@@ -23,11 +23,11 @@ namespace StorageData.Controllers
             IEnumerable<Guid> listEvents;
             if (beginPeriod != DateTime.MinValue && endPeriod != DateTime.MinValue)
             {
-                listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId && item.Frames.Timestamp >= beginPeriod && item.Frames.Timestamp <= endPeriod).Select(item => item.Frames.EventId).Distinct();
+                listEvents = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId && item.Frames.Timestamp >= beginPeriod && item.Frames.Timestamp <= endPeriod).Select(item => item.Frames.EventId).Distinct();
             }
             else
             {
-                listEvents = dbContext.EventAttributes.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
+                listEvents = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
             }
             return listEvents.ToList();
         }

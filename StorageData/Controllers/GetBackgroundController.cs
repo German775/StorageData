@@ -24,16 +24,37 @@ namespace StorageData.Controllers
         public IEnumerable<JsonBackground> Post(Guid eventId)
         {
             var backgroundList = new List<JsonBackground>();
-            var background = new JsonBackground();
 
-            var framesId = dbContext.EventAttributes.Where(item => item.Frames.EventId == eventId && item.Parameters.Name == "Type" && item.Value == "Background").Select(item => item.Frames.Id);
+            var framesId = dbContext.FrameParameters.Where(item => item.Frames.EventId == eventId && item.Parameters.Name == "Type" && item.Value == "Background").Select(item => item.Frames.Id);
             foreach (var frame in framesId)
             {
-                background.BackgroundId = dbContext.EventAttributes.Where(item => item.Parameters.Name == "BackgroundId" && Convert.ToString(item.Frames.Id) == Convert.ToString(frame)).Select(item => item.Value).First();
-                background.Data = 
-            }
-            return background;
+                var background = new JsonBackground();
+                var backgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && Convert.ToString(item.Frames.Id) == Convert.ToString(frame)).Select(item => item.Value).First().ToString();
+                background.BackgroundId = backgroundId;
 
+                using (var fileStream = new FileStream($"{configuration.GetConfiguration().PathForStoreImage.ToString()}//{eventId}//{"Background"}//{frame}.jpg", FileMode.Open, FileAccess.Read))
+                {
+                    var buffer = new byte[fileStream.Length];
+                    fileStream.Read(buffer, 0, (int)fileStream.Length);
+                    background.Data = (Convert.ToBase64String(buffer));
+                }
+                backgroundList.Add(background);
+            }
+            return backgroundList;
+
+
+            /*
+                var backgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && Convert.ToString(item.Frames.Id) == Convert.ToString(frame)).Select(item => item.Value).First().ToString();
+                var frameId = dbContext.FrameParameters.Where(item =>item.Parameters.Name == "BackgroundId" && item.Value == backgroundId && item.Frames.EventId == eventId).Select(item => item.Frames.Id).First().ToString();
+
+                background.BackgroundId = frameId;
+                using (var fileStream = new FileStream($"{configuration.GetConfiguration().PathForStoreImage.ToString()}//{eventId}//{"Background"}//{frameId}.jpg", FileMode.Open, FileAccess.Read))
+                {
+                    var buffer = new byte[fileStream.Length];
+                    fileStream.Read(buffer, 0, (int)fileStream.Length);
+                    background.Data = (Convert.ToBase64String(buffer));
+                }
+                */
 
             /*
             var frameId = dbContext.EventAttributes.Where(item => item.Parameters.Name == "BackgroundId" && item.Value == backgroundId).Select(item => item.Frames.Id).First();

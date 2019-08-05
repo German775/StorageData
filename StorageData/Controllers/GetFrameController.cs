@@ -26,12 +26,12 @@ namespace StorageData.Controllers
             {
                 var jsonFrame = new JsonFrame();
                 jsonFrame.FrameId = Guid.Parse(pathFrame.Name.Substring(0, pathFrame.Name.Length - 4));
-                jsonFrame.BackgroundId = dbContext.EventAttributes.Where(item => item.Parameters.Name == "BackgroundId" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                jsonFrame.DateTime = dbContext.EventAttributes.Where(item => item.Parameters.Name == "DateTime" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                jsonFrame.Coordinate_X = dbContext.EventAttributes.Where(item => item.Parameters.Name == "Coordinate_X" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                jsonFrame.Coordinate_Y = dbContext.EventAttributes.Where(item => item.Parameters.Name == "Coordinate_Y" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                jsonFrame.Width = dbContext.EventAttributes.Where(item => item.Parameters.Name == "Width" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                jsonFrame.Length = dbContext.EventAttributes.Where(item => item.Parameters.Name == "Length" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
+                jsonFrame.BackgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
+                jsonFrame.DateTime = dbContext.Frames.Where(item => item.Id == jsonFrame.FrameId).Select(item => item.Timestamp).First().ToString();
+                jsonFrame.Coordinate_X = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_X" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
+                jsonFrame.Coordinate_Y = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_Y" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
+                jsonFrame.Width = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Width" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
+                jsonFrame.Height = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Height" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
                 using (var fileStream = new FileStream(pathFrame.ToString(), FileMode.Open, FileAccess.Read))
                 {
                     var buffer = new byte[fileStream.Length];
@@ -40,7 +40,7 @@ namespace StorageData.Controllers
                 }
                 listFrame.Add(jsonFrame);
             }
-            return listFrame;
+            return listFrame.OrderBy(parameter => parameter.DateTime).ToList();
         }
     }
 }

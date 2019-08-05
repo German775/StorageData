@@ -33,7 +33,7 @@ namespace StorageData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventAttributes",
+                name: "FrameParameters",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -43,15 +43,15 @@ namespace StorageData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventAttributes", x => x.Id);
+                    table.PrimaryKey("PK_FrameParameters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EventAttributes_Frames_FramesId",
+                        name: "FK_FrameParameters_Frames_FramesId",
                         column: x => x.FramesId,
                         principalTable: "Frames",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EventAttributes_Parameters_ParametersId",
+                        name: "FK_FrameParameters_Parameters_ParametersId",
                         column: x => x.ParametersId,
                         principalTable: "Parameters",
                         principalColumn: "Id",
@@ -63,31 +63,30 @@ namespace StorageData.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("dae13c88-a51c-4ba7-92cc-2364842d60cd"), "Type" },
-                    { new Guid("d4b6384b-1340-445a-8442-6f6d3a1cb5b7"), "CameraId" },
-                    { new Guid("89680452-5e56-4e53-9f1a-fce6575a53ec"), "Coordinate_X" },
-                    { new Guid("01f0731c-8805-4c69-93c9-11452c8b18b9"), "Coordinate_Y" },
-                    { new Guid("f8a727c3-0fbb-4c88-848b-5ee318f23380"), "BackgroundId" },
-                    { new Guid("6beee271-8f34-40fd-9a61-4c35662fc38c"), "DateTime" },
-                    { new Guid("bd245af0-433c-46d0-9cc1-39a301bafc39"), "Width" },
-                    { new Guid("c1bb71bb-89c9-4c98-9f01-f5d51f6af121"), "Length" }
+                    { new Guid("928c85d1-ac64-4183-bb74-c7e0ba7fecc7"), "Type" },
+                    { new Guid("120579c9-8871-41c4-83ee-e15f3f7039a4"), "CameraId" },
+                    { new Guid("46bc0787-0c35-4f3e-acd7-6ce07ca26416"), "Coordinate_X" },
+                    { new Guid("8f74f474-2bd0-4986-884a-af4222a4048b"), "Coordinate_Y" },
+                    { new Guid("580f9556-5485-4ec6-bf92-f4100b382a6b"), "BackgroundId" },
+                    { new Guid("41d45ad5-ed99-4321-ab3b-63151ed3bbf3"), "Width" },
+                    { new Guid("b144dd04-98c4-4af5-b33b-aab602e66c59"), "Height" }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventAttributes_FramesId",
-                table: "EventAttributes",
+                name: "IX_FrameParameters_FramesId",
+                table: "FrameParameters",
                 column: "FramesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventAttributes_ParametersId",
-                table: "EventAttributes",
+                name: "IX_FrameParameters_ParametersId",
+                table: "FrameParameters",
                 column: "ParametersId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EventAttributes");
+                name: "FrameParameters");
 
             migrationBuilder.DropTable(
                 name: "Frames");

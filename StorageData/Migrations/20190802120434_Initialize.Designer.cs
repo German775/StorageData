@@ -10,7 +10,7 @@ using StorageData.DBContext;
 namespace StorageData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20190725094419_Initialize")]
+    [Migration("20190802120434_Initialize")]
     partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,21 @@ namespace StorageData.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("StorageData.Model.EventAttribute", b =>
+            modelBuilder.Entity("StorageData.Model.Frame", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("EventId");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Frames");
+                });
+
+            modelBuilder.Entity("StorageData.Model.FrameParameter", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -38,21 +52,7 @@ namespace StorageData.Migrations
 
                     b.HasIndex("ParametersId");
 
-                    b.ToTable("EventAttributes");
-                });
-
-            modelBuilder.Entity("StorageData.Model.Frame", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("EventId");
-
-                    b.Property<DateTime>("Timestamp");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Frames");
+                    b.ToTable("FrameParameters");
                 });
 
             modelBuilder.Entity("StorageData.Model.Parameter", b =>
@@ -69,47 +69,42 @@ namespace StorageData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dae13c88-a51c-4ba7-92cc-2364842d60cd"),
+                            Id = new Guid("928c85d1-ac64-4183-bb74-c7e0ba7fecc7"),
                             Name = "Type"
                         },
                         new
                         {
-                            Id = new Guid("d4b6384b-1340-445a-8442-6f6d3a1cb5b7"),
+                            Id = new Guid("120579c9-8871-41c4-83ee-e15f3f7039a4"),
                             Name = "CameraId"
                         },
                         new
                         {
-                            Id = new Guid("89680452-5e56-4e53-9f1a-fce6575a53ec"),
+                            Id = new Guid("46bc0787-0c35-4f3e-acd7-6ce07ca26416"),
                             Name = "Coordinate_X"
                         },
                         new
                         {
-                            Id = new Guid("01f0731c-8805-4c69-93c9-11452c8b18b9"),
+                            Id = new Guid("8f74f474-2bd0-4986-884a-af4222a4048b"),
                             Name = "Coordinate_Y"
                         },
                         new
                         {
-                            Id = new Guid("f8a727c3-0fbb-4c88-848b-5ee318f23380"),
+                            Id = new Guid("580f9556-5485-4ec6-bf92-f4100b382a6b"),
                             Name = "BackgroundId"
                         },
                         new
                         {
-                            Id = new Guid("6beee271-8f34-40fd-9a61-4c35662fc38c"),
-                            Name = "DateTime"
-                        },
-                        new
-                        {
-                            Id = new Guid("bd245af0-433c-46d0-9cc1-39a301bafc39"),
+                            Id = new Guid("41d45ad5-ed99-4321-ab3b-63151ed3bbf3"),
                             Name = "Width"
                         },
                         new
                         {
-                            Id = new Guid("c1bb71bb-89c9-4c98-9f01-f5d51f6af121"),
-                            Name = "Length"
+                            Id = new Guid("b144dd04-98c4-4af5-b33b-aab602e66c59"),
+                            Name = "Height"
                         });
                 });
 
-            modelBuilder.Entity("StorageData.Model.EventAttribute", b =>
+            modelBuilder.Entity("StorageData.Model.FrameParameter", b =>
                 {
                     b.HasOne("StorageData.Model.Frame", "Frames")
                         .WithMany("EventAttributes")
