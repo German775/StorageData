@@ -9,10 +9,11 @@ namespace StorageData.Controllers
     public class SetDataController : Controller
     {
         [HttpPost]
-        public void Post([FromBody]JsonData jsonData)
+        public void Post([FromBody]JsonData[] jsonData)
         {
             var storage = new Storage();
-            storage.AddData(jsonData);
+            foreach (var item in jsonData)
+                storage.AddData(item);
         }
     }
 }
