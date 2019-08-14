@@ -9,5 +9,7 @@ namespace StorageData.TransferData
     {
         public string BackgroundId { get; set; }
         public string Data { get; set; }
+        public string Width { get; set; }
+        public string Height { get; set; }
     }
 }

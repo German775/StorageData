@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StorageData.DBContext;
+using StorageData.TransferData;
 
 namespace StorageData.Controllers
 {
@@ -11,25 +13,38 @@ namespace StorageData.Controllers
     public class GetEventListController : Controller
     {
         public Context dbContext;
+        public List<JsonEvent> eventList;
 
         public GetEventListController()
         {
             this.dbContext = new Context();
+            this.eventList = new List<JsonEvent>();
         }
 
+        
         [HttpPost]
-        public ActionResult<IEnumerable<Guid>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
+        public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
         {
-            IEnumerable<Guid> listEvents;
-            if (beginPeriod != DateTime.MinValue && endPeriod != DateTime.MinValue)
+            var listEventsForCamera = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
+            foreach (var eventForCamera in listEventsForCamera)
             {
-                listEvents = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId && item.Frames.Timestamp >= beginPeriod && item.Frames.Timestamp <= endPeriod).Select(item => item.Frames.EventId).Distinct();
+                var transferEvent = new JsonEvent();
+                transferEvent.EventId = eventForCamera;
+                transferEvent.EventStartTime = dbContext.Frames.Where(item => item.EventId == eventForCamera).Min(item => item.Timestamp);
+                transferEvent.EventEndTime = dbContext.Frames.Where(item => item.EventId == eventForCamera).Max(item => item.Timestamp);
+                if (beginPeriod != DateTime.MinValue && endPeriod != DateTime.MinValue)
+                {
+                    if (transferEvent.EventStartTime >= beginPeriod && transferEvent.EventEndTime <= endPeriod)
+                    {
+                        eventList.Add(transferEvent);
+                    }
+                    else continue;
+                }
+                else
+                {
+                    eventList.Add(transferEvent);
+                }
             }
-            else
-            {
-                listEvents = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
-            }
-            return listEvents.ToList();
-        }
+            return eventList.OrderByDescending(item => item.EventEndTime).ToList();
     }
 }

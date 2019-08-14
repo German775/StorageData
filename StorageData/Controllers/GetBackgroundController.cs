@@ -29,8 +29,11 @@ namespace StorageData.Controllers
             foreach (var frame in framesId)
             {
                 var background = new JsonBackground();
-                var backgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && Convert.ToString(item.Frames.Id) == Convert.ToString(frame)).Select(item => item.Value).First().ToString();
-                background.BackgroundId = backgroundId;
+                background.BackgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && Convert.ToString(item.Frames.Id) == Convert.ToString(frame)).Select(item => item.Value).First().ToString();
+                background.Width = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Width" && item.Frames.Id == frame).Select(item => item.Value).First().ToString();
+                background.Height = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Height" && item.Frames.Id == frame).Select(item => item.Value).First().ToString();
+
+                //background.BackgroundId = backgroundId;
 
                 using (var fileStream = new FileStream($"{configuration.GetConfiguration().PathForStoreImage.ToString()}//{eventId}//{"Background"}//{frame}.jpg", FileMode.Open, FileAccess.Read))
                 {

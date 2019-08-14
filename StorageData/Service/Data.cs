@@ -27,23 +27,36 @@ namespace StorageData.Service
 
         public void AddData(JsonData data)
         {
-            if (data.Type == "Background")
+            if (data.Type == "Background" && data.EventId != null)
             {
-                DBAddBackground(data);
+                DBAddBackground(data, true);
             }
             else if (data.Type == "Frame")
             {
                 DBAddFrame(data);
             }
+            else if (data.Type == "Background" && data.EventId == null)
+            {
+                DBAddBackground(data, false);
+            }
         }
 
-        private void DBAddBackground(JsonData data)
+        private void DBAddBackground(JsonData data, bool eventAvailability)
         {
-            var frame = AddFrame(data);
-            dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("Type"), Value = data.Type.ToString() });
-            dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("CameraId"), Value = data.CameraId.ToString() });
-            dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("BackgroundId"), Value = data.BackgroundId.ToString() });
-            dbContext.SaveChanges();
+            if (eventAvailability == true)
+            {
+                var frame = AddFrame(data);
+                dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("Type"), Value = data.Type.ToString() });
+                dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("CameraId"), Value = data.CameraId.ToString() });
+                dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("BackgroundId"), Value = data.BackgroundId.ToString() });
+                dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("Width"), Value = data.Width.ToString() });
+                dbContext.FrameParameters.Add(new FrameParameter { Frames = frame, Parameters = getObjectParametr("Height"), Value = data.Height.ToString() });
+                dbContext.SaveChanges();
+            }
+            else
+            {
+                var frame = AddFrame(data);
+            }
         }
 
         private void DBAddFrame(JsonData data)
