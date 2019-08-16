@@ -21,7 +21,7 @@ namespace StorageData.Controllers
             this.eventList = new List<JsonEvent>();
         }
 
-        
+
         [HttpPost]
         public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
         {
@@ -46,5 +46,6 @@ namespace StorageData.Controllers
                 }
             }
             return eventList.OrderByDescending(item => item.EventEndTime).ToList();
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace StorageData
         public Configuration GetConfiguration()
         {
             string configurationString;
-            using (var jsonString = new StreamReader($"{Directory.GetCurrentDirectory()}\\ConfigurationFiles\\ConfigurationFile.json"))
+            using (var jsonString = new StreamReader($"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}ConfigurationFiles{Path.DirectorySeparatorChar}ConfigurationFile.json"))
             {
                 configurationString = jsonString.ReadToEnd();
             }
