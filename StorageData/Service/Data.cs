@@ -89,23 +89,22 @@ namespace StorageData.Service
 
         private void FileStorage(string path, string name, JsonData data)
         {
-            if (path == null || path == "")
+            if (string.IsNullOrEmpty(path))
             {
                 throw new Exception("There is no image storage path in the configuration file.");
             }
-            else
-            {
-                if (!Directory.Exists($"{path}\\{data.EventId}\\{data.Type}"))
-                {
-                    Directory.CreateDirectory($"{path}\\{data.EventId}\\{data.Type}");
-                }
 
-                var bytes = Convert.FromBase64String(data.Data);
-                using (var imageFile = new FileStream($"{path}\\{data.EventId}\\{data.Type}\\{name}.jpg", FileMode.Create))
-                {
-                    imageFile.Write(bytes, 0, bytes.Length);
-                    imageFile.Flush();
-                }
+            var directory = Path.Combine(new []{path, data.EventId.ToString(), data.Type});
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            var bytes = Convert.FromBase64String(data.Data);
+            using (var imageFile = new FileStream(Path.Combine(directory, $"{name}.jpg"), FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+            {
+                imageFile.Write(bytes, 0, bytes.Length);
             }
         }
 

@@ -37,7 +37,14 @@ namespace StorageData.Controllers
                     jsonFrame.Coordinate_Y = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_Y" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
                     jsonFrame.Width = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Width" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
                     jsonFrame.Height = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Height" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                    using (var fileStream = new FileStream($"{configuration.GetConfiguration().PathForStoreImage}\\{eventId}\\Frame\\{jsonFrame.FrameId}.jpg", FileMode.Open, FileAccess.Read))
+
+                    using (var fileStream =
+                        new FileStream(
+                            Path.Combine(new[]
+                            {
+                                configuration.GetConfiguration().PathForStoreImage, eventId.ToString(), "Frame",
+                                $"{jsonFrame.FrameId}.jpg"
+                            }), FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         var buffer = new byte[fileStream.Length];
                         fileStream.Read(buffer, 0, (int)fileStream.Length);
