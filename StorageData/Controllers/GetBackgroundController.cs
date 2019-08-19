@@ -35,12 +35,21 @@ namespace StorageData.Controllers
 
                 //background.BackgroundId = backgroundId;
 
-                using (var fileStream = new FileStream($"{configuration.GetConfiguration().PathForStoreImage.ToString()}//{eventId}//{"Background"}//{frame}.jpg", FileMode.Open, FileAccess.Read))
+                using (var fileStream =
+                    new FileStream(
+                        Path.Combine(new[]
+                        {
+                            configuration.GetConfiguration().PathForStoreImage,
+                            eventId.ToString(), 
+                            "Background",
+                            $"{frame}.jpg"
+                        }), FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     var buffer = new byte[fileStream.Length];
-                    fileStream.Read(buffer, 0, (int)fileStream.Length);
+                    fileStream.Read(buffer, 0, (int) fileStream.Length);
                     background.Data = (Convert.ToBase64String(buffer));
                 }
+
                 backgroundList.Add(background);
             }
             return backgroundList;
