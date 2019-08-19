@@ -6,11 +6,9 @@ namespace StorageData.DBContext
 {
     public class Context : DbContext
     {
-        public Configuration configuration;
 
         public Context()
         {
-            this.configuration = new Configuration();
             Database.EnsureCreated();
         }
 
@@ -20,7 +18,7 @@ namespace StorageData.DBContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(configuration.GetConfiguration().DatabaseConnectionString);
+            optionsBuilder.UseNpgsql(Configuration.GetConfiguration().DatabaseConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

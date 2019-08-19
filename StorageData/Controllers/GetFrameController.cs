@@ -13,11 +13,10 @@ namespace StorageData.Controllers
     public class GetFrameController : Controller
     {
         public Context dbContext;
-        public Configuration configuration;
+
         public GetFrameController()
         {
-            this.dbContext = new Context();
-            this.configuration = new Configuration();
+            dbContext = new Context(); // TODO: Get created IContext outside as constructor param
         }
         public ActionResult<IEnumerable<JsonFrame>> Post(Guid eventId, DateTime dataPastDetect)
         {
@@ -42,14 +41,15 @@ namespace StorageData.Controllers
                         new FileStream(
                             Path.Combine(new[]
                             {
-                                configuration.GetConfiguration().PathForStoreImage, eventId.ToString(), "Frame",
+                                Configuration.GetConfiguration().PathForStoreImage, eventId.ToString(), "Frame",
                                 $"{jsonFrame.FrameId}.jpg"
                             }), FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         var buffer = new byte[fileStream.Length];
-                        fileStream.Read(buffer, 0, (int)fileStream.Length);
-                        jsonFrame.Data = (Convert.ToBase64String(buffer));
+                        fileStream.Read(buffer, 0, (int) fileStream.Length);
+                        jsonFrame.Data = Convert.ToBase64String(buffer);
                     }
+
                     listFrame.Add(jsonFrame);
                 }
             }

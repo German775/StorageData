@@ -13,13 +13,12 @@ namespace StorageData.Controllers
     public class GetBackgroundController : Controller
     {
         public Context dbContext;
-        public Configuration configuration;
 
         public GetBackgroundController()
         {
             this.dbContext = new Context();
-            this.configuration = new Configuration();
         }
+
         [HttpPost]
         public IEnumerable<JsonBackground> Post(Guid eventId)
         {
@@ -39,7 +38,7 @@ namespace StorageData.Controllers
                     new FileStream(
                         Path.Combine(new[]
                         {
-                            configuration.GetConfiguration().PathForStoreImage,
+                            Configuration.GetConfiguration().PathForStoreImage,
                             eventId.ToString(), 
                             "Background",
                             $"{frame}.jpg"
@@ -47,7 +46,7 @@ namespace StorageData.Controllers
                 {
                     var buffer = new byte[fileStream.Length];
                     fileStream.Read(buffer, 0, (int) fileStream.Length);
-                    background.Data = (Convert.ToBase64String(buffer));
+                    background.Data = Convert.ToBase64String(buffer);
                 }
 
                 backgroundList.Add(background);
