@@ -27,16 +27,8 @@ namespace StorageData.Service
         {
             using (var transaction = dbContext.Database.BeginTransaction())
             {
-                //try
-                //{
-                    dbData.AddData(data);
-                    transaction.Commit();
-                //}
-                //catch (Exception exception)
-                //{
-                //    Console.WriteLine(exception);
-                //    transaction.Rollback();
-                //}
+                dbData.AddData(data);
+                transaction.Commit();
             }
         }
     }

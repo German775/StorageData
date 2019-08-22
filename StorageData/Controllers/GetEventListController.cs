@@ -24,7 +24,7 @@ namespace StorageData.Controllers
 
 
         [HttpPost]
-        public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod, Guid lastEvent)
+        public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod, Guid lastEvent, string movingType)
         {
             const int quantityReceivedImage = 10;
             var listEventsForCamera = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
@@ -56,8 +56,18 @@ namespace StorageData.Controllers
             if (lastEvent != Guid.Empty)
             {
                 var indexLastEvent = eventList.FindIndex(item => item.EventId == lastEvent);
-                Console.WriteLine(eventList);
-                nextPageEvents = eventList.Skip(++indexLastEvent).Take(quantityReceivedImage).ToList();
+                if (movingType == "Next")
+                {
+                    nextPageEvents = eventList.Skip(++indexLastEvent).Take(quantityReceivedImage).ToList();
+                    if (nextPageEvents.Count == 0)
+                    {
+                        nextPageEvents = eventList.Take(quantityReceivedImage).ToList();
+                    }
+                }
+                else if(movingType == "Back")
+                {
+                    nextPageEvents = eventList.Skip(--indexLastEvent - quantityReceivedImage).Take(quantityReceivedImage).ToList();
+                }
             }
             else
             {
