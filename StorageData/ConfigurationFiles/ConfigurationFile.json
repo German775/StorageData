@@ -2,5 +2,3 @@
   "PathForStoreImage": "D://StorageImages//",
   "DatabaseConnectionString": "Host=localhost;Port=5432;Database=storage;Username=postgres;Password=password"
 }
-
-
