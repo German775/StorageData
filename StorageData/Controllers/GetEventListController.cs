@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.Hosting;
 using StorageData.DBContext;
 using StorageData.TransferData;
 
@@ -13,19 +16,21 @@ namespace StorageData.Controllers
     public class GetEventListController : Controller
     {
         public Context dbContext;
-        public List<JsonEvent> eventList;
 
         public GetEventListController()
         {
             this.dbContext = new Context();
-            this.eventList = new List<JsonEvent>();
         }
 
 
         [HttpPost]
-        public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod)
+        public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod, Guid lastEvent)
         {
+            const int quantityReceivedImage = 10;
             var listEventsForCamera = dbContext.FrameParameters.Where(item => item.Parameters.Name == "CameraId" && item.Value == cameraId).Select(item => item.Frames.EventId).Distinct();
+            var eventList = new List<JsonEvent>();
+            var nextPageEvents = new List<JsonEvent>();
+
             foreach (var eventForCamera in listEventsForCamera)
             {
                 var transferEvent = new JsonEvent();
@@ -45,7 +50,21 @@ namespace StorageData.Controllers
                     eventList.Add(transferEvent);
                 }
             }
-            return eventList.OrderByDescending(item => item.EventEndTime).ToList();
+
+            eventList = eventList.OrderByDescending(item => item.EventStartTime).ToList();
+
+            if (lastEvent != Guid.Empty)
+            {
+                var indexLastEvent = eventList.FindIndex(item => item.EventId == lastEvent);
+                Console.WriteLine(eventList);
+                nextPageEvents = eventList.Skip(++indexLastEvent).Take(quantityReceivedImage).ToList();
+            }
+            else
+            {
+                nextPageEvents = eventList.Take(quantityReceivedImage).ToList();
+            }
+
+            return nextPageEvents;
         }
     }
 }
