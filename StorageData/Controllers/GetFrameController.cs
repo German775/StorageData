@@ -24,42 +24,43 @@ namespace StorageData.Controllers
         {
             const int quantityReceivedImage = 50;
             var listFrame = new List<JsonFrame>();
-            var dateFrames = dbContext.Frames.Where(item => item.EventId == eventId).OrderBy(item => item.Timestamp).Select(item => item.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture)).Distinct().ToList();
-            List<string> dates;
-            if (datePastDetect.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture) == DateTime.MinValue.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture) || datePastDetect == null)
+            var dateFrames = dbContext.Frames.Where(item => item.EventId == eventId).OrderBy(item => item.Timestamp).Select(item => item.Timestamp).Distinct().ToList();
+            List<DateTime> dates;
+
+            if (datePastDetect.Equals(DateTime.MinValue))
             {
                 dates = dateFrames.Take(quantityReceivedImage).ToList();
             }
             else
             {
-                var indexActualDate = dateFrames.FindIndex(item => item == datePastDetect.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture));
-                if (++indexActualDate >= dateFrames.Count)
+                var indexActualDate = dateFrames.FindIndex(item => item.Equals(datePastDetect));
+                if (indexActualDate >= dateFrames.Count - 1)
                 {
                     return new List<JsonFrame>();
                 }
-                dates = dateFrames.Skip(++indexActualDate).Take(quantityReceivedImage).ToList();
+                dates = dateFrames.GetRange(++indexActualDate, quantityReceivedImage);
             }
 
             foreach (var date in dates)
             {
-                var frames = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Type" && item.Value == "Frame" && item.Frames.EventId == eventId && item.Frames.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture) == date).Select(item => item.Frames.Id);
+                var frames = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Type" && item.Value == "Frame" && item.Frames.EventId == eventId && item.Frames.Timestamp.Equals(date)).Select(item => item.Frames);
                 foreach (var frame in frames)
                 {
                     var jsonFrame = new JsonFrame();
-                    jsonFrame.FrameId = frame;
-                    jsonFrame.BackgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                    jsonFrame.DateTime = dbContext.Frames.Where(item => item.Id == jsonFrame.FrameId).Select(item => item.Timestamp).First().ToString("yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture);
-                    jsonFrame.Coordinate_X = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_X" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                    jsonFrame.Coordinate_Y = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_Y" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                    jsonFrame.Width = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Width" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
-                    jsonFrame.Height = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Height" && item.Frames.Id == jsonFrame.FrameId).Select(item => item.Value).First();
+                    jsonFrame.FrameId = frame.Id;
+                    jsonFrame.BackgroundId = dbContext.FrameParameters.Where(item => item.Parameters.Name == "BackgroundId" && item.Frames.Id == frame.Id).Select(item => item.Value).First();
+                    jsonFrame.DateTime = frame.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                    jsonFrame.Coordinate_X = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_X" && item.Frames.Id == frame.Id).Select(item => item.Value).First();
+                    jsonFrame.Coordinate_Y = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Coordinate_Y" && item.Frames.Id == frame.Id).Select(item => item.Value).First();
+                    jsonFrame.Width = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Width" && item.Frames.Id == frame.Id).Select(item => item.Value).First();
+                    jsonFrame.Height = dbContext.FrameParameters.Where(item => item.Parameters.Name == "Height" && item.Frames.Id == frame.Id).Select(item => item.Value).First();
 
                     using (var fileStream =
                         new FileStream(
                             Path.Combine(new[]
                             {
                                 Configuration.GetConfiguration().PathForStoreImage, eventId.ToString(), "Frame",
-                                $"{jsonFrame.FrameId}.jpg"
+                                $"{frame.Id}.jpg"
                             }), FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
                         var buffer = new byte[fileStream.Length];
