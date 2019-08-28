@@ -33,8 +33,6 @@ namespace StorageData.Controllers
             }
             else
             {
-                
-
                 var indexActualDate = dateFrames.FindIndex(
                     item => (Math.Abs((item - datePastDetect).TotalMilliseconds) <= 1.0)
                     );
@@ -43,7 +41,7 @@ namespace StorageData.Controllers
                 {
                     return new List<JsonFrame>();
                 }
-                dates = dateFrames.GetRange(++indexActualDate,Math.Min(quantityReceivedImage, dateFrames.Count - (indexActualDate)));
+                dates = dateFrames.GetRange(++indexActualDate, Math.Min(quantityReceivedImage, dateFrames.Count - (indexActualDate)));
             }
 
             foreach (var date in dates)
