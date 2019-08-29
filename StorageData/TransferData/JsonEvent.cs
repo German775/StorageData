@@ -10,5 +10,6 @@ namespace StorageData.TransferData
         public Guid EventId { get; set; }
         public DateTime EventStartTime { get; set; }
         public DateTime EventEndTime { get; set; }
+        public int NumberImages { get; set; }
     }
 }

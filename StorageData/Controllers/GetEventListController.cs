@@ -22,7 +22,6 @@ namespace StorageData.Controllers
             this.dbContext = new Context();
         }
 
-
         [HttpPost]
         public ActionResult<IEnumerable<JsonEvent>> Post(string cameraId, DateTime beginPeriod, DateTime endPeriod, Guid lastEvent, string movingType)
         {
@@ -37,6 +36,8 @@ namespace StorageData.Controllers
                 transferEvent.EventId = eventForCamera;
                 transferEvent.EventStartTime = dbContext.Frames.Where(item => item.EventId == eventForCamera).Min(item => item.Timestamp);
                 transferEvent.EventEndTime = dbContext.Frames.Where(item => item.EventId == eventForCamera).Max(item => item.Timestamp);
+                transferEvent.NumberImages =
+                    dbContext.Frames.Where(item => item.EventId == eventForCamera).Distinct().Count();
                 if (beginPeriod != DateTime.MinValue && endPeriod != DateTime.MinValue)
                 {
                     if (transferEvent.EventStartTime >= beginPeriod && transferEvent.EventEndTime <= endPeriod)
@@ -57,13 +58,13 @@ namespace StorageData.Controllers
                 var indexLastEvent = eventList.FindIndex(item => item.EventId == lastEvent);
                 if (movingType == "Next")
                 {
-                    nextPageEvents = eventList.GetRange(++indexLastEvent,  Math.Min(quantityReceivedEvents, eventList.Count - indexLastEvent)); 
+                    nextPageEvents = eventList.GetRange(++indexLastEvent, Math.Min(quantityReceivedEvents, eventList.Count - indexLastEvent));
                     if (nextPageEvents.Count == 0)
                     {
                         nextPageEvents = eventList.Take(quantityReceivedEvents).ToList();
                     }
                 }
-                else if(movingType == "Back")
+                else if (movingType == "Back")
                 {
                     nextPageEvents = eventList.Skip(--indexLastEvent - quantityReceivedEvents).Take(quantityReceivedEvents).ToList();
                 }
